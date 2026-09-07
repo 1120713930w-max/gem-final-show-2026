@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#08050f" />
     <meta name="description" content="GEM 邓紫棋 2026 巡演尾场午休歌单特别企划" />
     <title>GEM 邓紫棋巡演尾场特别企划</title>
-    <link rel="stylesheet" href="./style.css?v=ef3b12d68ea3" />
+    <link rel="stylesheet" href="./style.css?v=cf666723e75e" />
   </head>
   <body>
     <div class="stage-atmosphere" aria-hidden="true">
@@ -109,11 +109,26 @@
       </footer>
     </main>
 
+    <button class="sound-control" id="ambientToggle" type="button" aria-pressed="false" aria-describedby="ambientHint">
+      <span class="sound-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 9.5v5h3.4l4.3 3.5V6L8.4 9.5H5Z" />
+          <path class="sound-wave sound-wave-one" d="M16 9a4.2 4.2 0 0 1 0 6" />
+          <path class="sound-wave sound-wave-two" d="M18.7 6.6a7.5 7.5 0 0 1 0 10.8" />
+        </svg>
+      </span>
+      <span class="sound-control-copy">
+        <strong>舞台氛围</strong>
+        <small id="ambientHint">点击开启 · 非原曲</small>
+      </span>
+      <span class="sound-meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </button>
+
     <div class="toast" id="toast" role="status" aria-live="polite">歌名已复制</div>
 
     <noscript>请开启浏览器的 JavaScript，以查看当天歌单。</noscript>
     <!-- 本地预览快照由 prepare.py 从 songs.json 生成；线上始终读取 songs.json。 -->
     <script id="offlineSongs" type="application/json">{"eventDate": "2026-10-05", "schedules": [{"date": "2026-09-20", "songs": [{"title": "光年之外", "message": "开启尾场倒计时"}, {"title": "喜欢你", "message": "经典旋律，陪伴午休时光"}]}, {"date": "2026-09-21", "songs": [{"title": "新的心跳", "message": "迎接新的开始"}, {"title": "多远都要在一起", "message": "音乐连接彼此"}]}, {"date": "2026-09-22", "songs": [{"title": "泡沫", "message": "GEM代表作品"}, {"title": "来自天堂的魔鬼", "message": "舞台能量释放"}]}, {"date": "2026-09-23", "songs": [{"title": "倒数", "message": "与时间一起倒计时"}, {"title": "句号", "message": "阶段结束，也是新的开始"}]}, {"date": "2026-09-24", "songs": [{"title": "天空没有极限", "message": "期待最终舞台"}, {"title": "再见", "message": "留下这段音乐记忆"}]}]}</script>
-    <script src="./script.js?v=68f29ed03b48" defer></script>
+    <script src="./script.js?v=70864bd17c9c" defer></script>
   </body>
 </html>

@@ -21,13 +21,19 @@
     todayStatus: document.querySelector("#todayStatus"),
     todayStatusText: document.querySelector("#todayStatusText"),
     scheduleList: document.querySelector("#scheduleList"),
+    ambientToggle: document.querySelector("#ambientToggle"),
+    ambientHint: document.querySelector("#ambientHint"),
     toast: document.querySelector("#toast")
   };
+
+  let ambientPlayer = null;
 
   elements.todaySongs.addEventListener("click", (event) => {
     const button = event.target.closest("[data-copy-song]");
     if (button) copySongName(button.dataset.copySong);
   });
+
+  elements.ambientToggle.addEventListener("click", toggleAmbient);
 
   refresh();
   // 在线页面每分钟获取新配置；重新回到页面时也立即检查。
@@ -271,6 +277,136 @@
 
   function escapeAttribute(value) {
     return escapeHtml(value);
+  }
+
+  async function toggleAmbient() {
+    if (ambientPlayer) {
+      stopAmbient();
+      return;
+    }
+
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      showToast("当前浏览器暂不支持网页氛围音乐");
+      return;
+    }
+
+    try {
+      const context = new AudioContextClass();
+      await context.resume();
+
+      const master = context.createGain();
+      const filter = context.createBiquadFilter();
+      const compressor = context.createDynamicsCompressor();
+      const delay = context.createDelay(1.5);
+      const feedback = context.createGain();
+      const delayLevel = context.createGain();
+
+      master.gain.setValueAtTime(0, context.currentTime);
+      master.gain.linearRampToValueAtTime(0.16, context.currentTime + 1.2);
+      filter.type = "lowpass";
+      filter.frequency.value = 1150;
+      filter.Q.value = 0.6;
+      delay.delayTime.value = 0.34;
+      feedback.gain.value = 0.18;
+      delayLevel.gain.value = 0.22;
+
+      master.connect(filter);
+      filter.connect(compressor);
+      filter.connect(delay);
+      delay.connect(feedback);
+      feedback.connect(delay);
+      delay.connect(delayLevel);
+      delayLevel.connect(compressor);
+      compressor.connect(context.destination);
+
+      const voices = ["sine", "triangle", "sine"].map((type, index) => {
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        oscillator.type = type;
+        gain.gain.value = index === 1 ? 0.045 : 0.035;
+        oscillator.connect(gain);
+        gain.connect(master);
+        oscillator.start();
+        return oscillator;
+      });
+
+      const chords = [
+        [110, 130.81, 164.81],
+        [87.31, 110, 130.81],
+        [65.41, 82.41, 98],
+        [98, 123.47, 146.83]
+      ];
+      let chordIndex = 0;
+
+      const setChord = () => {
+        const at = context.currentTime + 0.04;
+        chords[chordIndex].forEach((frequency, index) => {
+          voices[index].frequency.cancelScheduledValues(at);
+          voices[index].frequency.setTargetAtTime(frequency, at, 0.36);
+        });
+        chordIndex = (chordIndex + 1) % chords.length;
+      };
+
+      const playShimmer = () => {
+        if (context.state === "closed") return;
+        const chord = chords[(chordIndex + chords.length - 1) % chords.length];
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const at = context.currentTime;
+        oscillator.type = "sine";
+        oscillator.frequency.value = chord[Math.floor(Math.random() * chord.length)] * 4;
+        gain.gain.setValueAtTime(0.0001, at);
+        gain.gain.exponentialRampToValueAtTime(0.022, at + 0.035);
+        gain.gain.exponentialRampToValueAtTime(0.0001, at + 1.35);
+        oscillator.connect(gain);
+        gain.connect(master);
+        oscillator.start(at);
+        oscillator.stop(at + 1.4);
+      };
+
+      setChord();
+      ambientPlayer = {
+        context,
+        master,
+        voices,
+        chordTimer: window.setInterval(setChord, 4200),
+        shimmerTimer: window.setInterval(playShimmer, 1050)
+      };
+      setAmbientUi(true);
+      showToast("舞台氛围已开启");
+    } catch (error) {
+      ambientPlayer = null;
+      setAmbientUi(false);
+      showToast("音乐没有成功开启，请再试一次");
+    }
+  }
+
+  function stopAmbient() {
+    const player = ambientPlayer;
+    if (!player) return;
+    ambientPlayer = null;
+    window.clearInterval(player.chordTimer);
+    window.clearInterval(player.shimmerTimer);
+    const at = player.context.currentTime;
+    player.master.gain.cancelScheduledValues(at);
+    player.master.gain.setValueAtTime(player.master.gain.value, at);
+    player.master.gain.linearRampToValueAtTime(0, at + 0.45);
+    setAmbientUi(false);
+    showToast("舞台氛围已关闭");
+    window.setTimeout(() => {
+      player.voices.forEach((voice) => {
+        try { voice.stop(); } catch (_) { /* 已停止 */ }
+      });
+      player.context.close();
+    }, 520);
+  }
+
+  function setAmbientUi(isPlaying) {
+    elements.ambientToggle.setAttribute("aria-pressed", String(isPlaying));
+    elements.ambientToggle.setAttribute("aria-label", isPlaying ? "关闭舞台氛围音乐" : "开启舞台氛围音乐");
+    elements.ambientHint.textContent = isPlaying ? "播放中 · 点击关闭" : "点击开启 · 非原曲";
+    document.body.classList.toggle("sound-on", isPlaying);
   }
 
   async function copySongName(title) {
