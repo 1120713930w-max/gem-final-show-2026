@@ -303,10 +303,15 @@
       const delayLevel = context.createGain();
 
       master.gain.setValueAtTime(0, context.currentTime);
-      master.gain.linearRampToValueAtTime(0.16, context.currentTime + 1.2);
+      master.gain.linearRampToValueAtTime(0.58, context.currentTime + 1.2);
       filter.type = "lowpass";
-      filter.frequency.value = 1150;
+      filter.frequency.value = 1450;
       filter.Q.value = 0.6;
+      compressor.threshold.value = -18;
+      compressor.knee.value = 18;
+      compressor.ratio.value = 4;
+      compressor.attack.value = 0.012;
+      compressor.release.value = 0.38;
       delay.delayTime.value = 0.34;
       feedback.gain.value = 0.18;
       delayLevel.gain.value = 0.22;
@@ -324,7 +329,7 @@
         const oscillator = context.createOscillator();
         const gain = context.createGain();
         oscillator.type = type;
-        gain.gain.value = index === 1 ? 0.045 : 0.035;
+        gain.gain.value = index === 1 ? 0.06 : 0.052;
         oscillator.connect(gain);
         gain.connect(master);
         oscillator.start();
@@ -357,7 +362,7 @@
         oscillator.type = "sine";
         oscillator.frequency.value = chord[Math.floor(Math.random() * chord.length)] * 4;
         gain.gain.setValueAtTime(0.0001, at);
-        gain.gain.exponentialRampToValueAtTime(0.022, at + 0.035);
+        gain.gain.exponentialRampToValueAtTime(0.032, at + 0.035);
         gain.gain.exponentialRampToValueAtTime(0.0001, at + 1.35);
         oscillator.connect(gain);
         gain.connect(master);
