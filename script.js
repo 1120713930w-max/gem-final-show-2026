@@ -2,6 +2,8 @@
   "use strict";
 
   let config = { eventDate: "", schedules: [] };
+  let albumConfig = [];
+  let currentAlbumIndex = 0;
   let schedules = [];
   let now;
   let todayKey;
@@ -23,6 +25,11 @@
     scheduleList: document.querySelector("#scheduleList"),
     ambientToggle: document.querySelector("#ambientToggle"),
     ambientHint: document.querySelector("#ambientHint"),
+    albumShowcase: document.querySelector("#albumShowcase"),
+    albumCarousel: document.querySelector("#albumCarousel"),
+    albumProgress: document.querySelector("#albumProgress"),
+    albumTitle: document.querySelector("#albumTitle"),
+    albumOpenLink: document.querySelector("#albumOpenLink"),
     toast: document.querySelector("#toast")
   };
 
@@ -34,6 +41,28 @@
   });
 
   elements.ambientToggle.addEventListener("click", toggleAmbient);
+  elements.albumShowcase.addEventListener("click", handleAlbumClick);
+  elements.albumShowcase.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      changeAlbum(-1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      changeAlbum(1);
+    }
+  });
+
+  let albumPointerStart = null;
+  elements.albumCarousel.addEventListener("pointerdown", (event) => {
+    albumPointerStart = event.clientX;
+  });
+  elements.albumCarousel.addEventListener("pointerup", (event) => {
+    if (albumPointerStart === null) return;
+    const distance = event.clientX - albumPointerStart;
+    albumPointerStart = null;
+    if (Math.abs(distance) > 44) changeAlbum(distance > 0 ? -1 : 1);
+  });
+  elements.albumCarousel.addEventListener("pointercancel", () => { albumPointerStart = null; });
 
   refresh();
   // 在线页面每分钟获取新配置；重新回到页面时也立即检查。
@@ -48,27 +77,40 @@
     loading = true;
     try {
       let payload;
+      let albumPayload;
       if (location.protocol === "file:") {
         payload = document.querySelector("#offlineSongs").textContent;
+        albumPayload = document.querySelector("#offlineAlbums").textContent;
       } else {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 10000);
         try {
-          const response = await fetch(`./songs.json?v=${Date.now()}`, {
-            cache: "no-store", signal: controller.signal
-          });
-          if (!response.ok) throw new Error(`歌单请求失败：${response.status}`);
-          payload = await response.text();
+          const stamp = Date.now();
+          const [songResponse, albumResponse] = await Promise.all([
+            fetch(`./songs.json?v=${stamp}`, { cache: "no-store", signal: controller.signal }),
+            fetch(`./albums.json?v=${stamp}`, { cache: "no-store", signal: controller.signal })
+          ]);
+          if (!songResponse.ok) throw new Error(`歌单请求失败：${songResponse.status}`);
+          if (!albumResponse.ok) throw new Error(`专辑请求失败：${albumResponse.status}`);
+          [payload, albumPayload] = await Promise.all([songResponse.text(), albumResponse.text()]);
         } finally {
           clearTimeout(timeout);
         }
       }
       const next = JSON.parse(payload);
+      const nextAlbums = JSON.parse(albumPayload);
       validateConfig(next);
+      validateAlbums(nextAlbums);
       const current = new Date();
       const key = toDateKey(current);
-      if (payload !== lastPayload || key !== lastDate) {
+      const combinedPayload = `${payload}\n${albumPayload}`;
+      if (combinedPayload !== lastPayload || key !== lastDate) {
         config = next;
+        albumConfig = nextAlbums.albums;
+        const featuredIndex = albumConfig.findIndex((album) => album.title === nextAlbums.featuredAlbum);
+        if (!hasLoaded || currentAlbumIndex >= albumConfig.length) {
+          currentAlbumIndex = featuredIndex >= 0 ? featuredIndex : 0;
+        }
         schedules = [...config.schedules].sort((a, b) => a.date.localeCompare(b.date));
         now = current;
         todayKey = key;
@@ -77,7 +119,8 @@
         renderCountdown();
         renderTodaySongs();
         renderSchedule();
-        lastPayload = payload;
+        renderAlbumCarousel();
+        lastPayload = combinedPayload;
         lastDate = key;
       }
       hasLoaded = true;
@@ -111,6 +154,88 @@
       }
       dates.add(day.date);
     });
+  }
+
+  function validateAlbums(data) {
+    if (!data || !Array.isArray(data.albums) || !data.albums.length) {
+      throw new Error("专辑配置格式错误");
+    }
+    const names = new Set();
+    data.albums.forEach((album) => {
+      if (!album || typeof album.title !== "string" || !album.title.trim()
+        || names.has(album.title) || typeof album.image !== "string"
+        || !album.image.startsWith("./assets/albums/")
+        || typeof album.url !== "string"
+        || !/^https:\/\/music\.163\.com\/#\/album\?id=\d+$/.test(album.url)) {
+        throw new Error("专辑配置内容错误");
+      }
+      names.add(album.title);
+    });
+    if (!names.has(data.featuredAlbum)) throw new Error("默认专辑不存在");
+  }
+
+  function handleAlbumClick(event) {
+    const actionButton = event.target.closest("[data-album-action]");
+    if (actionButton) {
+      changeAlbum(actionButton.dataset.albumAction === "previous" ? -1 : 1);
+      return;
+    }
+
+    const albumButton = event.target.closest("[data-album-index]");
+    if (!albumButton) return;
+    const index = Number(albumButton.dataset.albumIndex);
+    if (index === currentAlbumIndex) {
+      window.open(albumConfig[index].url, "_blank", "noopener,noreferrer");
+    } else {
+      currentAlbumIndex = index;
+      renderAlbumCarousel();
+    }
+  }
+
+  function changeAlbum(direction) {
+    if (!albumConfig.length) return;
+    currentAlbumIndex = (currentAlbumIndex + direction + albumConfig.length) % albumConfig.length;
+    renderAlbumCarousel();
+  }
+
+  function renderAlbumCarousel() {
+    if (!albumConfig.length) return;
+
+    if (elements.albumCarousel.children.length !== albumConfig.length) {
+      elements.albumCarousel.innerHTML = albumConfig.map((album, index) => `
+        <button class="album-card" type="button" data-album-index="${index}">
+          <span class="album-frame">
+            <img src="${escapeAttribute(album.image)}" alt="《${escapeAttribute(album.title)}》专辑封面" width="1000" height="1000" />
+            <span class="album-sheen" aria-hidden="true"></span>
+          </span>
+          <span class="album-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m9 7 8 5-8 5V7Z" /></svg>
+          </span>
+        </button>
+      `).join("");
+    }
+
+    [...elements.albumCarousel.children].forEach((card, index) => {
+      let offset = index - currentAlbumIndex;
+      const half = albumConfig.length / 2;
+      if (offset > half) offset -= albumConfig.length;
+      if (offset < -half) offset += albumConfig.length;
+      const visibleOffset = Math.max(-2, Math.min(2, offset));
+      const isVisible = Math.abs(offset) <= 2;
+      card.className = `album-card album-position-${visibleOffset}`;
+      card.classList.toggle("is-hidden", !isVisible);
+      card.setAttribute("aria-hidden", String(!isVisible));
+      card.tabIndex = isVisible ? 0 : -1;
+      card.setAttribute("aria-label", index === currentAlbumIndex
+        ? `打开网易云音乐《${albumConfig[index].title}》专辑`
+        : `切换到《${albumConfig[index].title}》专辑`);
+    });
+
+    const currentAlbum = albumConfig[currentAlbumIndex];
+    elements.albumProgress.textContent = `${String(currentAlbumIndex + 1).padStart(2, "0")} / ${String(albumConfig.length).padStart(2, "0")}`;
+    elements.albumTitle.textContent = `《${currentAlbum.title}》`;
+    elements.albumOpenLink.href = currentAlbum.url;
+    elements.albumOpenLink.setAttribute("aria-label", `前往网易云音乐查看《${currentAlbum.title}》`);
   }
 
   function toDateKey(date) {

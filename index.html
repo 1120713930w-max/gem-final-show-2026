@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#08050f" />
-    <meta name="description" content="GEM 邓紫棋 2026 巡演尾场午休歌单特别企划" />
-    <title>GEM 邓紫棋巡演尾场特别企划</title>
-    <link rel="stylesheet" href="./style.css?v=9559e6ff1c9e" />
+    <meta name="description" content="GEM 邓紫棋 2026 巡演尾场午休歌单纪念页面" />
+    <title>GEM 邓紫棋巡演尾场纪念</title>
+    <link rel="stylesheet" href="./style.css?v=a1af488f119d" />
   </head>
   <body>
     <div class="stage-atmosphere" aria-hidden="true">
@@ -48,9 +48,28 @@
         <span class="hero-watermark" aria-hidden="true">G·E·M</span>
         <div class="hero-copy">
           <p class="eyebrow">G.E.M. 2026 TOUR · THE FINAL STAGE</p>
-          <h1 id="pageTitle"><span>GEM 邓紫棋</span><br />巡演尾场特别企划</h1>
+          <h1 id="pageTitle"><span>GEM 邓紫棋</span><br />巡演尾场纪念</h1>
           <p class="subtitle">用音乐陪伴，等待最终舞台</p>
         </div>
+
+        <section class="album-showcase" id="albumShowcase" aria-labelledby="albumShowcaseTitle" tabindex="0">
+          <div class="album-glow" aria-hidden="true"></div>
+          <p class="album-kicker" id="albumShowcaseTitle">G.E.M. ALBUM ARCHIVE</p>
+          <div class="album-carousel" id="albumCarousel" aria-live="polite"></div>
+          <div class="album-controls">
+            <button type="button" data-album-action="previous" aria-label="上一张专辑">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" /></svg>
+            </button>
+            <span id="albumProgress">— / —</span>
+            <button type="button" data-album-action="next" aria-label="下一张专辑">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" /></svg>
+            </button>
+          </div>
+          <a class="album-open-link" id="albumOpenLink" href="#" target="_blank" rel="noopener noreferrer">
+            <span id="albumTitle">专辑载入中</span>
+            <small>前往网易云音乐</small>
+          </a>
+        </section>
 
         <aside class="countdown" aria-label="距离巡演尾场倒计时">
           <div class="countdown-head">
@@ -136,8 +155,9 @@
     <div class="toast" id="toast" role="status" aria-live="polite">歌名已复制</div>
 
     <noscript>请开启浏览器的 JavaScript，以查看当天歌单。</noscript>
-    <!-- 本地预览快照由 prepare.py 从 songs.json 生成；线上始终读取 songs.json。 -->
+    <!-- 本地预览快照由 prepare.py 从 JSON 数据生成；线上始终读取独立数据文件。 -->
     <script id="offlineSongs" type="application/json">{"eventDate": "2026-10-05", "schedules": [{"date": "2026-09-20", "songs": [{"title": "光年之外", "message": "开启尾场倒计时"}, {"title": "喜欢你", "message": "经典旋律，陪伴午休时光"}]}, {"date": "2026-09-21", "songs": [{"title": "新的心跳", "message": "迎接新的开始"}, {"title": "多远都要在一起", "message": "音乐连接彼此"}]}, {"date": "2026-09-22", "songs": [{"title": "泡沫", "message": "GEM代表作品"}, {"title": "来自天堂的魔鬼", "message": "舞台能量释放"}]}, {"date": "2026-09-23", "songs": [{"title": "倒数", "message": "与时间一起倒计时"}, {"title": "句号", "message": "阶段结束，也是新的开始"}]}, {"date": "2026-09-24", "songs": [{"title": "天空没有极限", "message": "期待最终舞台"}, {"title": "再见", "message": "留下这段音乐记忆"}]}]}</script>
-    <script src="./script.js?v=6d46dcc053b8" defer></script>
+    <script id="offlineAlbums" type="application/json">{"featuredAlbum": "摩天动物园", "albums": [{"title": "Revelación", "image": "./assets/albums/revelacion.jpg", "url": "https://music.163.com/#/album?id=168097897"}, {"title": "I AM GLORIA", "image": "./assets/albums/i-am-gloria.jpg", "url": "https://music.163.com/#/album?id=274821019"}, {"title": "摩天动物园", "image": "./assets/albums/city-zoo.jpg", "url": "https://music.163.com/#/album?id=84391762"}, {"title": "Xposed", "image": "./assets/albums/xposed.jpg", "url": "https://music.163.com/#/album?id=23497"}, {"title": "启示录", "image": "./assets/albums/revelation.jpg", "url": "https://music.163.com/#/album?id=149367827"}, {"title": "T.I.M.E.", "image": "./assets/albums/time.jpg", "url": "https://music.163.com/#/album?id=174925713"}, {"title": "新的心跳", "image": "./assets/albums/heartbeat.jpg", "url": "https://music.163.com/#/album?id=3189002"}, {"title": "孤独", "image": "./assets/albums/loneliness.jpg", "url": "https://music.163.com/#/album?id=96426263"}]}</script>
+    <script src="./script.js?v=c6140a64a91c" defer></script>
   </body>
 </html>

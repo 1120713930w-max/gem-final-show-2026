@@ -147,7 +147,7 @@ button {
 .particles i:nth-child(16) { top: 35%; left: 4%; animation-delay: -1.1s; }
 
 .page-shell {
-  width: min(1180px, calc(100% - 48px));
+  width: min(1380px, calc(100% - 48px));
   margin: 0 auto;
   padding: 34px 0 42px;
 }
@@ -216,9 +216,9 @@ button {
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  align-items: end;
-  gap: 48px;
+  grid-template-columns: minmax(360px, 1.05fr) minmax(330px, 0.9fr) 320px;
+  align-items: center;
+  gap: 24px;
   padding: 8px 4px 54px;
   isolation: isolate;
 }
@@ -226,7 +226,7 @@ button {
 .hero-galaxy {
   position: absolute;
   top: -160px;
-  right: 65px;
+  right: 235px;
   z-index: -1;
   width: 690px;
   height: 480px;
@@ -398,7 +398,7 @@ button {
 h1 {
   margin: 15px 0 18px;
   font-family: "Songti SC", "STSong", Georgia, serif;
-  font-size: clamp(2.9rem, 6.6vw, 5.2rem);
+  font-size: clamp(2.9rem, 5vw, 5rem);
   font-weight: 500;
   line-height: 1.02;
   letter-spacing: -0.055em;
@@ -416,6 +416,291 @@ h1 span {
   color: var(--muted);
   font-size: 1rem;
   letter-spacing: 0.08em;
+}
+
+.album-showcase {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  min-height: 330px;
+  padding-top: 21px;
+  border-radius: 30px;
+  outline: none;
+  isolation: isolate;
+}
+
+.album-showcase:focus-visible {
+  box-shadow: 0 0 0 2px rgba(201, 156, 255, 0.62);
+}
+
+.album-glow {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  z-index: -1;
+  width: 330px;
+  height: 245px;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(224, 198, 255, 0.2), transparent 14%),
+    radial-gradient(ellipse at 50% 52%, rgba(141, 70, 236, 0.26), rgba(77, 74, 202, 0.12) 38%, transparent 69%);
+  filter: blur(18px);
+  transform: translateX(-50%);
+  animation: album-glow-breathe 7s ease-in-out infinite alternate;
+}
+
+.album-glow::after {
+  position: absolute;
+  inset: 27% -9%;
+  border: 1px solid rgba(205, 175, 255, 0.12);
+  border-radius: 50%;
+  content: "";
+  transform: rotate(-9deg);
+}
+
+.album-kicker {
+  margin: 0;
+  color: #a98bc9;
+  font-size: 0.6rem;
+  font-weight: 760;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+.album-carousel {
+  position: relative;
+  height: 242px;
+  margin: 6px -18px 0;
+  perspective: 1000px;
+  touch-action: pan-y;
+}
+
+.album-card {
+  --album-x: 0px;
+  --album-scale: 0.52;
+  --album-rotate: 0deg;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 212px;
+  height: 212px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  opacity: 0;
+  cursor: pointer;
+  transform: translate(calc(-50% + var(--album-x)), -50%) scale(var(--album-scale)) rotateY(var(--album-rotate));
+  transform-style: preserve-3d;
+  transition: transform 420ms cubic-bezier(0.2, 0.75, 0.2, 1), opacity 300ms ease, filter 300ms ease;
+}
+
+.album-card:focus-visible {
+  outline: 2px solid #d4a9ff;
+  outline-offset: 7px;
+  border-radius: 22px;
+}
+
+.album-card.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.album-position-0 {
+  --album-scale: 1;
+  z-index: 5;
+  opacity: 1;
+  filter: brightness(1.02) saturate(1.04);
+}
+
+.album-position--1 {
+  --album-x: -94px;
+  --album-scale: 0.72;
+  --album-rotate: 10deg;
+  z-index: 3;
+  opacity: 0.64;
+  filter: brightness(0.67) saturate(0.82);
+}
+
+.album-position-1 {
+  --album-x: 94px;
+  --album-scale: 0.72;
+  --album-rotate: -10deg;
+  z-index: 3;
+  opacity: 0.64;
+  filter: brightness(0.67) saturate(0.82);
+}
+
+.album-position--2 {
+  --album-x: -151px;
+  --album-scale: 0.51;
+  --album-rotate: 15deg;
+  z-index: 2;
+  opacity: 0.24;
+  filter: brightness(0.52) saturate(0.7);
+}
+
+.album-position-2 {
+  --album-x: 151px;
+  --album-scale: 0.51;
+  --album-rotate: -15deg;
+  z-index: 2;
+  opacity: 0.24;
+  filter: brightness(0.52) saturate(0.7);
+}
+
+.album-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(222, 185, 255, 0.55);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(238, 216, 255, 0.26), rgba(82, 33, 133, 0.19));
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(133, 73, 206, 0.24),
+    0 0 27px rgba(169, 89, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(10px);
+}
+
+.album-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.album-sheen {
+  position: absolute;
+  inset: 7px;
+  border-radius: 16px;
+  pointer-events: none;
+  background: linear-gradient(122deg, rgba(255, 255, 255, 0.19), transparent 25% 68%, rgba(183, 113, 255, 0.09));
+  mix-blend-mode: screen;
+}
+
+.album-play {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  z-index: 7;
+  display: grid;
+  width: 47px;
+  height: 47px;
+  place-items: center;
+  border: 1px solid rgba(241, 221, 255, 0.7);
+  border-radius: 50%;
+  background: rgba(39, 17, 61, 0.88);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(184, 104, 255, 0.34);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.album-position-0 .album-play {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.album-play svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.album-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: -1px;
+}
+
+.album-controls button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgba(202, 160, 255, 0.14);
+  border-radius: 50%;
+  color: #b992e6;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.album-controls button:hover {
+  border-color: rgba(202, 160, 255, 0.42);
+  color: #f2e4ff;
+  background: rgba(154, 83, 228, 0.13);
+  transform: translateY(-1px);
+}
+
+.album-controls button:focus-visible,
+.album-open-link:focus-visible {
+  outline: 2px solid #c99cff;
+  outline-offset: 2px;
+}
+
+.album-controls svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+.album-controls span {
+  min-width: 52px;
+  color: #b9a5ca;
+  font-family: Georgia, serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.album-open-link {
+  display: grid;
+  width: fit-content;
+  max-width: 90%;
+  gap: 2px;
+  margin: 6px auto 0;
+  padding: 4px 9px;
+  border-radius: 8px;
+  color: #e9dcf5;
+  text-align: center;
+  text-decoration: none;
+}
+
+.album-open-link span {
+  overflow: hidden;
+  font-family: "Songti SC", "STSong", Georgia, serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.album-open-link small {
+  color: #8e78a3;
+  font-size: 0.56rem;
+  letter-spacing: 0.09em;
+}
+
+.album-open-link:hover span {
+  color: #cf9fff;
 }
 
 .countdown {
@@ -1282,7 +1567,31 @@ footer p {
   to { transform: scaleY(1.08); }
 }
 
+@keyframes album-glow-breathe {
+  from { opacity: 0.58; transform: translateX(-50%) scale(0.94); }
+  to { opacity: 0.92; transform: translateX(-50%) scale(1.05); }
+}
+
 @media (max-width: 1040px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 330px;
+  }
+
+  .hero-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .countdown {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .album-showcase {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
   .schedule-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1296,6 +1605,19 @@ footer p {
   .hero {
     grid-template-columns: 1fr;
     gap: 30px;
+  }
+
+  .hero-copy,
+  .album-showcase,
+  .countdown {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .album-showcase {
+    grid-column: auto;
+    width: min(430px, 100%);
+    margin: -10px auto 0;
   }
 
   .hero-galaxy {
@@ -1378,6 +1700,27 @@ footer p {
   .hero {
     padding-bottom: 38px;
   }
+
+  .album-showcase {
+    min-height: 305px;
+    margin-top: -2px;
+  }
+
+  .album-carousel {
+    height: 224px;
+    margin-right: -8px;
+    margin-left: -8px;
+  }
+
+  .album-card {
+    width: 192px;
+    height: 192px;
+  }
+
+  .album-position--1 { --album-x: -78px; }
+  .album-position-1 { --album-x: 78px; }
+  .album-position--2 { --album-x: -126px; }
+  .album-position-2 { --album-x: 126px; }
 
   .hero-galaxy {
     top: -90px;

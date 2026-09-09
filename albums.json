@@ -1,0 +1,45 @@
+{
+  "featuredAlbum": "摩天动物园",
+  "albums": [
+    {
+      "title": "Revelación",
+      "image": "./assets/albums/revelacion.jpg",
+      "url": "https://music.163.com/#/album?id=168097897"
+    },
+    {
+      "title": "I AM GLORIA",
+      "image": "./assets/albums/i-am-gloria.jpg",
+      "url": "https://music.163.com/#/album?id=274821019"
+    },
+    {
+      "title": "摩天动物园",
+      "image": "./assets/albums/city-zoo.jpg",
+      "url": "https://music.163.com/#/album?id=84391762"
+    },
+    {
+      "title": "Xposed",
+      "image": "./assets/albums/xposed.jpg",
+      "url": "https://music.163.com/#/album?id=23497"
+    },
+    {
+      "title": "启示录",
+      "image": "./assets/albums/revelation.jpg",
+      "url": "https://music.163.com/#/album?id=149367827"
+    },
+    {
+      "title": "T.I.M.E.",
+      "image": "./assets/albums/time.jpg",
+      "url": "https://music.163.com/#/album?id=174925713"
+    },
+    {
+      "title": "新的心跳",
+      "image": "./assets/albums/heartbeat.jpg",
+      "url": "https://music.163.com/#/album?id=3189002"
+    },
+    {
+      "title": "孤独",
+      "image": "./assets/albums/loneliness.jpg",
+      "url": "https://music.163.com/#/album?id=96426263"
+    }
+  ]
+}
