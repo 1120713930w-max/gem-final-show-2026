@@ -19,14 +19,21 @@
 }
 
 html {
+  width: 100%;
+  max-width: 100%;
   min-width: 320px;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
   background: var(--bg);
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
   color: var(--text);
   background:
     radial-gradient(ellipse at 73% 7%, rgba(45, 80, 157, 0.12), transparent 30rem),
@@ -148,6 +155,7 @@ button {
 
 .page-shell {
   width: min(1380px, calc(100% - 48px));
+  max-width: 100%;
   margin: 0 auto;
   padding: 34px 0 42px;
 }
@@ -474,6 +482,14 @@ h1 span {
   margin: 6px -18px 0;
   perspective: 1000px;
   touch-action: pan-y;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.album-carousel.is-dragging,
+.album-carousel.is-dragging * {
+  cursor: grabbing;
 }
 
 .album-card {
@@ -576,6 +592,8 @@ h1 span {
   height: 100%;
   border-radius: 16px;
   object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .album-sheen {
@@ -1702,14 +1720,19 @@ footer p {
   }
 
   .album-showcase {
+    width: 100%;
+    max-width: 100%;
     min-height: 305px;
     margin-top: -2px;
+    overflow: hidden;
+    contain: layout paint;
   }
 
   .album-carousel {
+    width: 100%;
     height: 224px;
-    margin-right: -8px;
-    margin-left: -8px;
+    margin-right: 0;
+    margin-left: 0;
   }
 
   .album-card {
@@ -1721,6 +1744,17 @@ footer p {
   .album-position-1 { --album-x: 78px; }
   .album-position--2 { --album-x: -126px; }
   .album-position-2 { --album-x: 126px; }
+
+  .album-controls button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .album-open-link {
+    min-height: 44px;
+    align-content: center;
+    padding: 6px 12px;
+  }
 
   .hero-galaxy {
     top: -90px;

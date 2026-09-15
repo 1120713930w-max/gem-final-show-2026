@@ -34,6 +34,7 @@
   };
 
   let ambientPlayer = null;
+  let suppressAlbumClickUntil = 0;
 
   elements.todaySongs.addEventListener("click", (event) => {
     const button = event.target.closest("[data-copy-song]");
@@ -52,17 +53,53 @@
     }
   });
 
-  let albumPointerStart = null;
+  const albumPointer = {
+    id: null,
+    startX: 0,
+    startY: 0,
+    distanceX: 0,
+    distanceY: 0,
+    isHorizontal: false
+  };
+
   elements.albumCarousel.addEventListener("pointerdown", (event) => {
-    albumPointerStart = event.clientX;
+    if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+    albumPointer.id = event.pointerId;
+    albumPointer.startX = event.clientX;
+    albumPointer.startY = event.clientY;
+    albumPointer.distanceX = 0;
+    albumPointer.distanceY = 0;
+    albumPointer.isHorizontal = false;
+    elements.albumCarousel.setPointerCapture?.(event.pointerId);
   });
+
+  elements.albumCarousel.addEventListener("pointermove", (event) => {
+    if (event.pointerId !== albumPointer.id) return;
+    albumPointer.distanceX = event.clientX - albumPointer.startX;
+    albumPointer.distanceY = event.clientY - albumPointer.startY;
+
+    if (!albumPointer.isHorizontal
+      && Math.abs(albumPointer.distanceX) > 8
+      && Math.abs(albumPointer.distanceX) > Math.abs(albumPointer.distanceY)) {
+      albumPointer.isHorizontal = true;
+      elements.albumCarousel.classList.add("is-dragging");
+    }
+
+    if (albumPointer.isHorizontal) event.preventDefault();
+  }, { passive: false });
+
   elements.albumCarousel.addEventListener("pointerup", (event) => {
-    if (albumPointerStart === null) return;
-    const distance = event.clientX - albumPointerStart;
-    albumPointerStart = null;
-    if (Math.abs(distance) > 44) changeAlbum(distance > 0 ? -1 : 1);
+    if (event.pointerId !== albumPointer.id) return;
+    const shouldChangeAlbum = albumPointer.isHorizontal && Math.abs(albumPointer.distanceX) > 44;
+    if (albumPointer.isHorizontal) suppressAlbumClickUntil = Date.now() + 350;
+    if (shouldChangeAlbum) changeAlbum(albumPointer.distanceX > 0 ? -1 : 1);
+    resetAlbumPointer(event.pointerId);
   });
-  elements.albumCarousel.addEventListener("pointercancel", () => { albumPointerStart = null; });
+
+  elements.albumCarousel.addEventListener("pointercancel", (event) => {
+    if (event.pointerId === albumPointer.id) resetAlbumPointer(event.pointerId);
+  });
+  elements.albumCarousel.addEventListener("dragstart", (event) => event.preventDefault());
 
   refresh();
   // 在线页面每分钟获取新配置；重新回到页面时也立即检查。
@@ -175,6 +212,11 @@
   }
 
   function handleAlbumClick(event) {
+    if (Date.now() < suppressAlbumClickUntil) {
+      event.preventDefault();
+      return;
+    }
+
     const actionButton = event.target.closest("[data-album-action]");
     if (actionButton) {
       changeAlbum(actionButton.dataset.albumAction === "previous" ? -1 : 1);
@@ -198,6 +240,17 @@
     renderAlbumCarousel();
   }
 
+  function resetAlbumPointer(pointerId) {
+    if (elements.albumCarousel.hasPointerCapture?.(pointerId)) {
+      elements.albumCarousel.releasePointerCapture(pointerId);
+    }
+    albumPointer.id = null;
+    albumPointer.distanceX = 0;
+    albumPointer.distanceY = 0;
+    albumPointer.isHorizontal = false;
+    elements.albumCarousel.classList.remove("is-dragging");
+  }
+
   function renderAlbumCarousel() {
     if (!albumConfig.length) return;
 
@@ -205,7 +258,7 @@
       elements.albumCarousel.innerHTML = albumConfig.map((album, index) => `
         <button class="album-card" type="button" data-album-index="${index}">
           <span class="album-frame">
-            <img src="${escapeAttribute(album.image)}" alt="《${escapeAttribute(album.title)}》专辑封面" width="1000" height="1000" />
+            <img src="${escapeAttribute(album.image)}" alt="《${escapeAttribute(album.title)}》专辑封面" width="1000" height="1000" draggable="false" />
             <span class="album-sheen" aria-hidden="true"></span>
           </span>
           <span class="album-play" aria-hidden="true">
