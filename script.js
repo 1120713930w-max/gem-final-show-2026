@@ -70,7 +70,6 @@
     albumPointer.distanceX = 0;
     albumPointer.distanceY = 0;
     albumPointer.isHorizontal = false;
-    elements.albumCarousel.setPointerCapture?.(event.pointerId);
   });
 
   elements.albumCarousel.addEventListener("pointermove", (event) => {
@@ -82,6 +81,7 @@
       && Math.abs(albumPointer.distanceX) > 8
       && Math.abs(albumPointer.distanceX) > Math.abs(albumPointer.distanceY)) {
       albumPointer.isHorizontal = true;
+      elements.albumCarousel.setPointerCapture?.(event.pointerId);
       elements.albumCarousel.classList.add("is-dragging");
     }
 
@@ -178,7 +178,8 @@
   function validateConfig(data) {
     const validDate = (value) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
       && toDateKey(parseLocalDate(value)) === value;
-    if (!data || !validDate(data.eventDate) || !Array.isArray(data.schedules)) {
+    if (!data || !validDate(data.countdownStartDate) || !validDate(data.eventDate)
+      || data.countdownStartDate >= data.eventDate || !Array.isArray(data.schedules)) {
       throw new Error("歌单配置格式错误");
     }
     const dates = new Set();
@@ -325,13 +326,14 @@
     const eventDate = parseLocalDate(config.eventDate);
     const dayMs = 24 * 60 * 60 * 1000;
     const daysLeft = Math.max(0, Math.ceil((eventDate - today) / dayMs));
-    const startDate = schedules.length ? parseLocalDate(schedules[0].date) : today;
+    const startDate = parseLocalDate(config.countdownStartDate);
     const totalDays = Math.max(1, Math.ceil((eventDate - startDate) / dayMs));
     const elapsed = Math.max(0, Math.min(totalDays, Math.ceil((today - startDate) / dayMs)));
+    const progressPercent = (elapsed / totalDays) * 100;
 
     elements.eventDate.textContent = formatFullDate(eventDate);
     elements.countdownDays.textContent = String(daysLeft);
-    elements.countdownProgress.style.width = `${Math.max(5, (elapsed / totalDays) * 100)}%`;
+    elements.countdownProgress.style.width = `${progressPercent}%`;
 
     if (today.getTime() === eventDate.getTime()) {
       elements.countdownCopy.textContent = "最终舞台，就在今天";
