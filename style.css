@@ -227,22 +227,22 @@ button {
   grid-template-columns: minmax(360px, 1fr) minmax(410px, 0.96fr) 306px;
   align-items: center;
   gap: 18px;
-  padding: 8px 4px 86px;
+  padding: 8px 4px 102px;
   isolation: isolate;
 }
 
 .hero-galaxy {
   position: absolute;
-  top: -160px;
-  right: 235px;
+  top: -172px;
+  right: 126px;
   z-index: -1;
-  width: 690px;
-  height: 480px;
-  opacity: 0.88;
+  width: 900px;
+  height: 560px;
+  opacity: 0.98;
   pointer-events: none;
   transform: rotate(-7deg);
-  mask-image: radial-gradient(ellipse at 55% 50%, #000 0 22%, rgba(0, 0, 0, 0.86) 42%, transparent 76%);
-  -webkit-mask-image: radial-gradient(ellipse at 55% 50%, #000 0 22%, rgba(0, 0, 0, 0.86) 42%, transparent 76%);
+  mask-image: radial-gradient(ellipse at 55% 50%, #000 0 25%, rgba(0, 0, 0, 0.9) 46%, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse at 55% 50%, #000 0 25%, rgba(0, 0, 0, 0.9) 46%, transparent 82%);
 }
 
 .hero-galaxy::before,
@@ -255,22 +255,22 @@ button {
 
 .hero-galaxy::before {
   background:
-    radial-gradient(circle at 55% 50%, rgba(253, 248, 255, 0.72) 0 1px, rgba(221, 192, 255, 0.32) 3px, transparent 8%),
-    radial-gradient(ellipse at 55% 50%, transparent 0 11%, rgba(191, 133, 255, 0.13) 15%, transparent 24%),
-    radial-gradient(ellipse at 55% 50%, transparent 0 22%, rgba(105, 126, 255, 0.09) 27%, transparent 36%),
-    repeating-conic-gradient(from 205deg at 55% 50%, transparent 0 9deg, rgba(171, 105, 255, 0.055) 11deg 15deg, transparent 18deg 30deg);
-  filter: blur(3px);
+    radial-gradient(circle at 55% 50%, rgba(253, 248, 255, 0.82) 0 1px, rgba(221, 192, 255, 0.42) 3px, transparent 9%),
+    radial-gradient(ellipse at 55% 50%, transparent 0 11%, rgba(191, 133, 255, 0.22) 15%, transparent 25%),
+    radial-gradient(ellipse at 55% 50%, transparent 0 22%, rgba(105, 126, 255, 0.15) 28%, transparent 38%),
+    repeating-conic-gradient(from 205deg at 55% 50%, transparent 0 9deg, rgba(171, 105, 255, 0.09) 11deg 15deg, transparent 18deg 30deg);
+  filter: blur(2.4px);
   transform: scaleX(1.18) rotate(-4deg);
   animation: cosmic-drift 24s ease-in-out infinite alternate;
 }
 
 .hero-galaxy::after {
   inset: 12% 5%;
-  opacity: 0.66;
+  opacity: 0.82;
   background:
-    radial-gradient(ellipse at 52% 48%, transparent 0 18%, rgba(197, 151, 255, 0.11) 21%, transparent 24%),
-    radial-gradient(ellipse at 56% 54%, transparent 0 30%, rgba(92, 126, 255, 0.08) 32%, transparent 35%);
-  border: 1px solid rgba(187, 161, 255, 0.055);
+    radial-gradient(ellipse at 52% 48%, transparent 0 18%, rgba(197, 151, 255, 0.18) 21%, transparent 24%),
+    radial-gradient(ellipse at 56% 54%, transparent 0 30%, rgba(92, 126, 255, 0.13) 32%, transparent 35%);
+  border: 1px solid rgba(187, 161, 255, 0.1);
   filter: blur(0.5px);
   transform: rotate(-13deg) scaleY(0.62);
 }
@@ -286,8 +286,8 @@ button {
   left: 24%;
   width: 380px;
   height: 150px;
-  opacity: 0.42;
-  background: linear-gradient(90deg, transparent, rgba(127, 72, 235, 0.28), rgba(176, 102, 255, 0.2), transparent);
+  opacity: 0.58;
+  background: linear-gradient(90deg, transparent, rgba(127, 72, 235, 0.36), rgba(176, 102, 255, 0.27), transparent);
   transform: rotate(-17deg);
 }
 
@@ -296,8 +296,8 @@ button {
   left: 43%;
   width: 260px;
   height: 118px;
-  opacity: 0.34;
-  background: linear-gradient(90deg, transparent, rgba(75, 110, 223, 0.34), rgba(203, 129, 255, 0.16), transparent);
+  opacity: 0.46;
+  background: linear-gradient(90deg, transparent, rgba(75, 110, 223, 0.42), rgba(203, 129, 255, 0.22), transparent);
   transform: rotate(12deg);
 }
 
@@ -437,6 +437,42 @@ h1 span {
   isolation: isolate;
 }
 
+.album-showcase::before {
+  position: absolute;
+  top: 312px;
+  left: 50%;
+  z-index: -2;
+  width: 900px;
+  height: 220px;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 0, rgba(183, 100, 244, 0.36), rgba(110, 58, 169, 0.22) 30%, rgba(53, 28, 81, 0.1) 56%, transparent 82%);
+  filter: drop-shadow(0 -18px 44px rgba(179, 90, 255, 0.17));
+  transform: translateX(-50%);
+}
+
+.album-showcase::after {
+  position: absolute;
+  top: 294px;
+  left: 50%;
+  z-index: -1;
+  width: 760px;
+  height: 236px;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 11% 24%, rgba(255, 255, 255, 0.72) 0 1px, transparent 2px),
+    radial-gradient(circle at 29% 66%, rgba(204, 153, 255, 0.5) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 34%, rgba(159, 177, 255, 0.46) 0 1px, transparent 2px),
+    radial-gradient(circle at 90% 72%, rgba(241, 211, 255, 0.46) 0 1px, transparent 2px),
+    radial-gradient(ellipse at 50% 6%, rgba(219, 154, 255, 0.2), rgba(110, 65, 186, 0.09) 36%, transparent 71%);
+  filter: drop-shadow(0 0 8px rgba(169, 102, 255, 0.5));
+  mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.6) 50%, transparent 96%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.6) 50%, transparent 96%);
+  transform: translateX(-50%);
+}
+
 .album-showcase:focus-visible {
   box-shadow: 0 0 0 2px rgba(201, 156, 255, 0.62);
 }
@@ -446,15 +482,15 @@ h1 span {
   top: 30px;
   left: 50%;
   z-index: -1;
-  width: 490px;
-  height: 330px;
+  width: 650px;
+  height: 388px;
   border-radius: 50%;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 44%, rgba(247, 234, 255, 0.34), transparent 14%),
-    radial-gradient(ellipse at 50% 48%, rgba(166, 92, 255, 0.38), rgba(72, 79, 196, 0.17) 41%, transparent 72%),
-    radial-gradient(ellipse at 50% 88%, rgba(204, 104, 255, 0.32), rgba(110, 64, 208, 0.1) 44%, transparent 68%);
-  filter: blur(21px);
+    radial-gradient(circle at 50% 42%, rgba(250, 240, 255, 0.42), transparent 13%),
+    radial-gradient(ellipse at 50% 45%, rgba(172, 95, 255, 0.47), rgba(72, 79, 196, 0.21) 42%, transparent 72%),
+    radial-gradient(ellipse at 50% 86%, rgba(218, 117, 255, 0.39), rgba(110, 64, 208, 0.13) 46%, transparent 70%);
+  filter: blur(18px);
   transform: translateX(-50%);
   animation: album-glow-breathe 7s ease-in-out infinite alternate;
 }
@@ -490,18 +526,18 @@ h1 span {
 
 .album-carousel::before {
   position: absolute;
-  right: 2%;
-  bottom: -78px;
-  left: 2%;
+  right: -18%;
+  bottom: -86px;
+  left: -18%;
   z-index: 0;
-  height: 170px;
-  border-radius: 50%;
+  height: 188px;
+  border-radius: 42% 42% 50% 50%;
   content: "";
   pointer-events: none;
   background:
-    radial-gradient(ellipse at center, rgba(220, 132, 255, 0.32), rgba(123, 70, 202, 0.15) 39%, rgba(65, 51, 146, 0.06) 61%, transparent 78%);
-  filter: blur(15px);
-  transform: scaleY(0.5);
+    radial-gradient(ellipse at center top, rgba(236, 168, 255, 0.42), rgba(147, 82, 221, 0.21) 34%, rgba(65, 51, 146, 0.08) 62%, transparent 82%);
+  filter: blur(13px);
+  transform: scaleY(0.58);
 }
 
 .album-carousel::after {
@@ -567,8 +603,8 @@ h1 span {
   --album-scale: 0.7;
   --album-rotate: 11deg;
   z-index: 3;
-  opacity: 0.68;
-  filter: brightness(0.66) saturate(0.8);
+  opacity: 0.76;
+  filter: brightness(0.72) saturate(0.88);
 }
 
 .album-position-1 {
@@ -576,8 +612,8 @@ h1 span {
   --album-scale: 0.7;
   --album-rotate: -11deg;
   z-index: 3;
-  opacity: 0.68;
-  filter: brightness(0.66) saturate(0.8);
+  opacity: 0.76;
+  filter: brightness(0.72) saturate(0.88);
 }
 
 .album-position--2 {
@@ -585,8 +621,8 @@ h1 span {
   --album-scale: 0.49;
   --album-rotate: 17deg;
   z-index: 2;
-  opacity: 0.3;
-  filter: brightness(0.5) saturate(0.68);
+  opacity: 0.39;
+  filter: brightness(0.58) saturate(0.76);
 }
 
 .album-position-2 {
@@ -594,8 +630,8 @@ h1 span {
   --album-scale: 0.49;
   --album-rotate: -17deg;
   z-index: 2;
-  opacity: 0.3;
-  filter: brightness(0.5) saturate(0.68);
+  opacity: 0.39;
+  filter: brightness(0.58) saturate(0.76);
 }
 
 .album-frame {
@@ -691,7 +727,7 @@ h1 span {
 
 .album-position--1 .album-reflection,
 .album-position-1 .album-reflection {
-  opacity: 0.1;
+  opacity: 0.14;
 }
 
 .album-play {
@@ -1762,6 +1798,14 @@ footer p {
     margin: -10px auto 0;
   }
 
+  .album-showcase::before {
+    width: 700px;
+  }
+
+  .album-showcase::after {
+    width: 650px;
+  }
+
   .hero-galaxy {
     top: -125px;
     right: -92px;
@@ -1852,11 +1896,38 @@ footer p {
     contain: layout paint;
   }
 
+  .album-showcase::before {
+    top: 236px;
+    width: 128%;
+    height: 132px;
+    opacity: 0.78;
+  }
+
+  .album-showcase::after {
+    top: 224px;
+    width: 122%;
+    height: 145px;
+    opacity: 0.72;
+  }
+
+  .album-glow {
+    width: 130%;
+    height: 300px;
+  }
+
   .album-carousel {
     width: 100%;
     height: 248px;
     margin-right: 0;
     margin-left: 0;
+  }
+
+  .album-carousel::before {
+    right: -8%;
+    bottom: -58px;
+    left: -8%;
+    height: 118px;
+    opacity: 0.74;
   }
 
   .album-card {
