@@ -526,18 +526,18 @@ h1 span {
 
 .album-carousel::before {
   position: absolute;
-  right: -28%;
-  bottom: -92px;
-  left: -28%;
+  right: -20%;
+  bottom: -88px;
+  left: -20%;
   z-index: 0;
-  height: 204px;
+  height: 190px;
   content: "";
   pointer-events: none;
   background:
-    radial-gradient(ellipse 62% 94% at 50% 0%, rgba(236, 168, 255, 0.38), rgba(147, 82, 221, 0.19) 32%, rgba(65, 51, 146, 0.07) 57%, transparent 78%);
-  filter: blur(19px);
-  opacity: 0.92;
-  transform: scaleY(0.66);
+    radial-gradient(ellipse 64% 92% at 50% 0%, rgba(236, 168, 255, 0.3), rgba(147, 82, 221, 0.14) 32%, rgba(65, 51, 146, 0.045) 58%, transparent 80%);
+  filter: blur(20px);
+  opacity: 0.48;
+  transform: scaleY(0.6);
 }
 
 .album-carousel::after {
@@ -688,23 +688,17 @@ h1 span {
 .album-reflection {
   position: absolute;
   top: calc(100% + 7px);
-  right: 7px;
-  left: 7px;
+  right: 13px;
+  left: 13px;
   z-index: 0;
-  height: 60%;
+  height: 55%;
   overflow: hidden;
-  border-radius: 20px 20px 42% 42% / 8% 8% 48% 48%;
+  border-radius: 18px;
   opacity: 0;
   pointer-events: none;
-  filter: blur(0.35px);
-  mask-image:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.62) 28%, rgba(0, 0, 0, 0.2) 70%, transparent 100%),
-    linear-gradient(to right, transparent, rgba(0, 0, 0, 0.42) 12%, #000 27%, #000 73%, rgba(0, 0, 0, 0.42) 88%, transparent);
-  mask-composite: intersect;
-  -webkit-mask-image:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.62) 28%, rgba(0, 0, 0, 0.2) 70%, transparent 100%),
-    linear-gradient(to right, transparent, rgba(0, 0, 0, 0.42) 12%, #000 27%, #000 73%, rgba(0, 0, 0, 0.42) 88%, transparent);
-  -webkit-mask-composite: source-in;
+  filter: blur(0.45px);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.76), rgba(0, 0, 0, 0.42) 30%, rgba(0, 0, 0, 0.12) 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.76), rgba(0, 0, 0, 0.42) 30%, rgba(0, 0, 0, 0.12) 70%, transparent 100%);
   transition: opacity 320ms ease;
 }
 
@@ -756,7 +750,7 @@ h1 span {
 }
 
 .album-position-0 .album-reflection {
-  opacity: 0.78;
+  opacity: 0.58;
 }
 
 .album-position--1 .album-reflection,
@@ -1975,12 +1969,12 @@ footer p {
   }
 
   .album-carousel::before {
-    right: -18%;
+    right: -12%;
     bottom: -58px;
-    left: -18%;
-    height: 126px;
-    filter: blur(16px);
-    opacity: 0.68;
+    left: -12%;
+    height: 118px;
+    filter: blur(17px);
+    opacity: 0.38;
   }
 
   .album-card {
@@ -1995,12 +1989,12 @@ footer p {
 
   .album-reflection {
     top: calc(100% + 5px);
-    height: 46%;
+    height: 42%;
     filter: blur(0.3px);
   }
 
   .album-position-0 .album-reflection {
-    opacity: 0.5;
+    opacity: 0.36;
   }
 
   .album-reflection::before {
