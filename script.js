@@ -267,6 +267,9 @@
             <img src="${escapeAttribute(album.image)}" alt="《${escapeAttribute(album.title)}》专辑封面" width="1000" height="1000" draggable="false" />
             <span class="album-sheen" aria-hidden="true"></span>
           </span>
+          <span class="album-reflection" aria-hidden="true">
+            <img src="${escapeAttribute(album.image)}" alt="" width="1000" height="1000" draggable="false" />
+          </span>
           <span class="album-play" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="m9 7 8 5-8 5V7Z" /></svg>
           </span>
