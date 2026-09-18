@@ -526,18 +526,18 @@ h1 span {
 
 .album-carousel::before {
   position: absolute;
-  right: -18%;
-  bottom: -86px;
-  left: -18%;
+  right: -28%;
+  bottom: -92px;
+  left: -28%;
   z-index: 0;
-  height: 188px;
-  border-radius: 42% 42% 50% 50%;
+  height: 204px;
   content: "";
   pointer-events: none;
   background:
-    radial-gradient(ellipse at center top, rgba(236, 168, 255, 0.42), rgba(147, 82, 221, 0.21) 34%, rgba(65, 51, 146, 0.08) 62%, transparent 82%);
-  filter: blur(13px);
-  transform: scaleY(0.58);
+    radial-gradient(ellipse 62% 94% at 50% 0%, rgba(236, 168, 255, 0.38), rgba(147, 82, 221, 0.19) 32%, rgba(65, 51, 146, 0.07) 57%, transparent 78%);
+  filter: blur(19px);
+  opacity: 0.92;
+  transform: scaleY(0.66);
 }
 
 .album-carousel::after {
@@ -697,8 +697,14 @@ h1 span {
   opacity: 0;
   pointer-events: none;
   filter: blur(0.35px);
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.58) 28%, rgba(0, 0, 0, 0.2) 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.58) 28%, rgba(0, 0, 0, 0.2) 70%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.62) 28%, rgba(0, 0, 0, 0.2) 70%, transparent 100%),
+    linear-gradient(to right, transparent, rgba(0, 0, 0, 0.42) 12%, #000 27%, #000 73%, rgba(0, 0, 0, 0.42) 88%, transparent);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.62) 28%, rgba(0, 0, 0, 0.2) 70%, transparent 100%),
+    linear-gradient(to right, transparent, rgba(0, 0, 0, 0.42) 12%, #000 27%, #000 73%, rgba(0, 0, 0, 0.42) 88%, transparent);
+  -webkit-mask-composite: source-in;
   transition: opacity 320ms ease;
 }
 
@@ -1969,11 +1975,12 @@ footer p {
   }
 
   .album-carousel::before {
-    right: -8%;
+    right: -18%;
     bottom: -58px;
-    left: -8%;
-    height: 118px;
-    opacity: 0.74;
+    left: -18%;
+    height: 126px;
+    filter: blur(16px);
+    opacity: 0.68;
   }
 
   .album-card {
