@@ -178,19 +178,24 @@
   function validateConfig(data) {
     const validDate = (value) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
       && toDateKey(parseLocalDate(value)) === value;
+    const validSong = (song) => song && typeof song.title === "string"
+      && song.title.trim() && typeof song.message === "string";
     if (!data || !validDate(data.countdownStartDate) || !validDate(data.eventDate)
       || data.countdownStartDate >= data.eventDate || !Array.isArray(data.schedules)) {
       throw new Error("歌单配置格式错误");
     }
     const dates = new Set();
+    const bufferTitles = new Set();
     data.schedules.forEach((day) => {
       if (!day || !validDate(day.date) || dates.has(day.date)
         || !Array.isArray(day.songs) || day.songs.length !== 2
-        || day.songs.some((song) => !song || typeof song.title !== "string"
-          || !song.title.trim() || typeof song.message !== "string")) {
-        throw new Error("每天需要两个歌曲条目，且日期不能重复");
+        || day.songs.some((song) => !validSong(song)) || !validSong(day.bufferSong)
+        || bufferTitles.has(day.bufferSong.title)
+        || day.songs.some((song) => song.title === day.bufferSong.title)) {
+        throw new Error("每天需要两首主题歌曲和一首不重复的补位歌曲，且日期不能重复");
       }
       dates.add(day.date);
+      bufferTitles.add(day.bufferSong.title);
     });
   }
 
@@ -361,12 +366,13 @@
     }
 
     const fragment = document.createDocumentFragment();
-    todaySchedule.songs.forEach((song, index) => {
+    getDailyTracks(todaySchedule).forEach(({ song, index, isBuffer }) => {
       const card = document.createElement("article");
-      card.className = "today-song-card";
+      card.className = `today-song-card${isBuffer ? " is-buffer" : ""}`;
       card.innerHTML = `
         <span class="track-number">0${index + 1}</span>
         <div>
+          ${isBuffer ? '<span class="song-role">补位歌曲 · 衔接10分钟</span>' : ""}
           <button class="song-name" type="button" data-copy-song="${escapeAttribute(song.title)}" aria-label="复制歌曲《${escapeAttribute(song.title)}》">
             <span>《${escapeHtml(song.title)}》</span>
             <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -398,9 +404,9 @@
           <span>${escapeHtml(formatWeekday(date))}${state === "is-today" ? " · 今日" : ""}</span>
         </div>
         <div class="schedule-tracks">
-          ${schedule.songs.map((song, index) => `
-            <div class="schedule-track">
-              <small>TRACK 0${index + 1}</small>
+          ${getDailyTracks(schedule).map(({ song, index, isBuffer }) => `
+            <div class="schedule-track${isBuffer ? " is-buffer" : ""}">
+              <small>${isBuffer ? "BUFFER · 10 MIN" : `TRACK 0${index + 1}`}</small>
               <strong title="《${escapeAttribute(song.title)}》">《${escapeHtml(song.title)}》</strong>
               <p>${escapeHtml(song.message)}</p>
               ${renderMusicLinks(song.title, true)}
@@ -412,6 +418,11 @@
     });
 
     elements.scheduleList.replaceChildren(fragment);
+  }
+
+  function getDailyTracks(schedule) {
+    const themeTracks = schedule.songs.map((song, index) => ({ song, index, isBuffer: false }));
+    return [...themeTracks, { song: schedule.bufferSong, index: 2, isBuffer: true }];
   }
 
   function renderMusicLinks(title, compact) {

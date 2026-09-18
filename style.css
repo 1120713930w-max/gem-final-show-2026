@@ -931,7 +931,9 @@ h1 span {
 
 .today-songs {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 14px;
+  align-items: stretch;
 }
 
 .today-song-card {
@@ -951,6 +953,24 @@ h1 span {
   border-color: rgba(179, 151, 255, 0.31);
   background: rgba(255, 255, 255, 0.055);
   transform: translateX(3px);
+}
+
+.today-song-card.is-buffer {
+  border-color: rgba(237, 201, 130, 0.2);
+  background: linear-gradient(118deg, rgba(237, 201, 130, 0.075), rgba(112, 94, 185, 0.025));
+}
+
+.song-role {
+  display: inline-flex;
+  margin: -3px 0 9px;
+  padding: 4px 8px;
+  border: 1px solid rgba(237, 201, 130, 0.18);
+  border-radius: 999px;
+  color: #d9bd88;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(237, 201, 130, 0.055);
 }
 
 .track-number {
@@ -1341,6 +1361,15 @@ h1 span {
 
 .schedule-track {
   min-width: 0;
+}
+
+.schedule-track.is-buffer {
+  padding-top: 14px;
+  border-top: 1px solid rgba(237, 201, 130, 0.12);
+}
+
+.schedule-track.is-buffer small {
+  color: #a98b62;
 }
 
 .schedule-track small {
@@ -1866,6 +1895,10 @@ footer p {
   .schedule-tracks {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 15px;
+  }
+
+  .schedule-track.is-buffer {
+    grid-column: 1 / -1;
   }
 
   footer {
